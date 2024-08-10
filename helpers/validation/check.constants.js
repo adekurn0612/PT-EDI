@@ -1,0 +1,15 @@
+export const CHECKCONTSTANTS = {
+  STRING: "string",
+  DEFINED: "defined",
+  STANDAR_KODE: "standar_kode",
+  STATUS: "status",
+  RESOURCE: "resource",
+  NUMBER: "number",
+  ENUM: "enum",
+  DELETED: "deleted",
+  BOOLEAN: "boolean",
+  ARRAY: "array",
+  JSON: "json",
+  ARRAY_OF_OBJECT: "array_of_object",
+  MIN_MAX: "min_max",
+};
