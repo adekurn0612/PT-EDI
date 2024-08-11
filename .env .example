@@ -1,0 +1,10 @@
+PORT_EXPRESS = 3000
+
+DB_NAME = 
+DB_USER = 
+DB_PASS = 
+DB_HOST = 
+DB_PORT = 
+DB_DIAL =
+
+APP = DEV
