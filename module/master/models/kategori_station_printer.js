@@ -1,18 +1,19 @@
 import { DataTypes } from "sequelize";
 import { DB } from "../../../config/database/connections.js";
 
-const product_promo = DB.define(
-  "ms_product_promo",
+const kategori_station_printer = DB.define(
+  "kategori_station_printer",
   {
-    id_product_promo: {
+    id_kategori_station_printer: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    id_promo: {
+    id_kategori: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
-    id_product: {
+    id_station_printer: {
       type: DataTypes.INTEGER,
     },
 
@@ -45,12 +46,12 @@ const product_promo = DB.define(
     },
   },
   {
-    schema: "transaksi",
+    schema: "master",
     paranoid: true,
     freezeTableName: true,
   }
 );
 if (process.env.APP == "DEV") {
-  product_promo.sync({ alter: true });
+  kategori_station_printer.sync({ alter: true });
 }
-export default product_promo;
+export default kategori_station_printer;

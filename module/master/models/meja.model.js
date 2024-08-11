@@ -16,6 +16,9 @@ const meja = DB.define(
     keterangan: {
       type: DataTypes.TEXT,
     },
+    status: {
+      type: DataTypes.INTEGER,
+    },
 
     createdBy: {
       type: DataTypes.INTEGER,

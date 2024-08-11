@@ -1,5 +1,6 @@
-import { Sequelize } from "sequelize";
+import { Sequelize, QueryTypes } from "sequelize";
 
+// Initialize Sequelize instance
 export const DB = new Sequelize({
   database: process.env.DB_NAME,
   username: process.env.DB_USER,
@@ -15,3 +16,16 @@ export const DB = new Sequelize({
   },
   logging: false, // Change to `console.log` if you want to see SQL queries
 });
+
+// Custom query function
+DB.queryString = function (querystring) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Execute the query using the Sequelize instance
+      let query = await this.query(querystring, { type: QueryTypes.SELECT });
+      resolve(query);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

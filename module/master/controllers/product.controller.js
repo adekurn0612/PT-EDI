@@ -17,17 +17,20 @@ const create = async (req, res, next) => {
         key: id_kategori,
         variable_name: `kategori`,
       },
-      {
-        method: `number`,
-        key: id_variant,
-        variable_name: `variant`,
-      },
+
       {
         method: `number`,
         key: harga,
         variable_name: `harga`,
       },
     ];
+    if (id_variant && id_variant != "") {
+      array.push({
+        method: `number`,
+        key: id_variant,
+        variable_name: `variant`,
+      });
+    }
     await Check.multiple_check_stringvar({ array });
 
     await productService.createProduct({
@@ -40,6 +43,22 @@ const create = async (req, res, next) => {
       data: null,
       additionalData: null,
     });
+  } catch (error) {
+    next(error);
+  }
+  next();
+};
+
+const findAllProduct = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+  next();
+};
+
+const findAllPromo = async (req, res, next) => {
+  try {
   } catch (error) {
     next(error);
   }

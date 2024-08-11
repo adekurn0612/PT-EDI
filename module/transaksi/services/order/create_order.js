@@ -1,86 +1,39 @@
-import { checkProductQuantities } from "./utility/validate_product_create_order.js";
-import { validatePromos } from "./utility/validate_promo_create_product.js";
-import product from "../../../master/models/product.models.js";
 import order from "../../models/order.model.js";
 import order_detail from "../../models/order_detail.js";
 import meja from "../../../master/models/meja.model.js";
+import DataNotFoundError from "../../../../helpers/error/dataNotFoundErrorHelper.js";
+import {
+  STATUS_MEJA,
+  STATUS_MEJA_TEXT,
+} from "../../../../helpers/constants/constansStatusMeja.js";
+import { STATUS_ORDER } from "../../../../helpers/constants/constansStatusOrder.js";
 
-export const createOrder = async ({ order_item, order_promo, id_meja }) => {
-  const transaction = await sequelize.transaction(); // Mulai transaksi
-
+export const createOrder = async ({
+  nama_customer,
+  id_meja,
+  status = STATUS_ORDER.DRAFT,
+}) => {
   try {
-    const [productCheck, promoCheck, mejaCheck] = await Promise.all([
-      checkProductQuantities(order_item, transaction),
-      validatePromos(order_promo, order_item, transaction),
-      meja.findByPk(id_meja),
-    ]);
+    const cek_meja = await meja.findByPk(id_meja);
 
-    // Simpan order
-    const newOrder = await order.create(
-      {
-        totalAmount: order_item.reduce(
-          (sum, item) => sum + product.get(item.id_product).price * item.qty,
-          0
-        ),
+    if (!cek_meja) {
+      throw new DataNotFoundError({ message: "data meja tidak ditemukan" });
+    } else if (cek_meja.status !== STATUS_MEJA.TERSEDIA) {
+      throw new DataNotFoundError({
+        message: `tidak bisa melakukan order di meja ini karena meja ini sudah ${
+          STATUS_MEJA_TEXT[cek_meja.status]
+        }`,
+      });
+    } else {
+      const data = {
+        nama_customer,
         id_meja,
-      },
-      { transaction }
-    );
-
-    // Simpan order detail
-    await Promise.all(
-      order_item.map(async (item) => {
-        const { id_product, qty } = item;
-        const productDetails = product.get(id_product);
-
-        // Kurangi stok produk
-        await product.update(
-          {
-            stock: productDetails.stock - qty,
-          },
-          {
-            where: { id: id_product },
-            transaction,
-          }
-        );
-
-        // Simpan detail order
-        await order_detail.create(
-          {
-            orderId: newOrder.id,
-            productId: id_product,
-            quantity: qty,
-            price: productDetails.price,
-          },
-          { transaction }
-        );
-      })
-    );
-
-    // Simpan promo jika ada
-    if (order_promo && order_promo.length > 0) {
-      await Promise.all(
-        order_promo.map((promoId) =>
-          order_promo.create(
-            {
-              orderId: newOrder.id,
-              promoId,
-            },
-            { transaction }
-          )
-        )
-      );
+        status,
+      };
+      await order.create(data);
     }
-
-    // Commit transaksi
-    await transaction.commit();
-    req.body.responses = FormatResponse.successObject({
-      data: newOrder,
-      additionalData: null,
-    });
   } catch (error) {
-    // Rollback transaksi jika terjadi error
-    await transaction.rollback();
+    console.error("Error creating order:", error);
     throw error;
   }
 };

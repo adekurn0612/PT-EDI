@@ -15,7 +15,7 @@ export const createProduct = async ({
   try {
     const [validate_variant, validate_kategori, validate_product] =
       await Promise.all([
-        variant.findByPk(id_variant),
+        id_variant ? variant.findByPk(id_variant) : true,
         kategori.findByPk(id_kategori),
         product.findOne({
           where: { nama_product, id_variant, id_kategori, harga },

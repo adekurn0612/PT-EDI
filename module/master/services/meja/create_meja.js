@@ -1,7 +1,8 @@
 import { DataDuplicateError } from "../../../../helpers/error/index.js";
+import kategori_station_printer from "../../models/kategori_station_printer.js";
 import meja from "./../../models/meja.model.js";
 
-export const createMeja = async ({ nama_meja, keterangan }) => {
+export const createMeja = async ({ nama_meja, keterangan, status }) => {
   try {
     const mejaExist = await meja.findOne({
       where: { nama_meja },
@@ -15,6 +16,7 @@ export const createMeja = async ({ nama_meja, keterangan }) => {
       let data = {
         nama_meja,
         keterangan,
+        status,
       };
       await meja.create(data);
     }
