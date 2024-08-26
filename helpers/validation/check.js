@@ -1,4 +1,8 @@
-import { ValidationError, errorInFunction } from "./../error/index.js";
+import {
+  DataNotFoundError,
+  ValidationError,
+  errorInFunction,
+} from "./../error/index.js";
 import { CHECKCONTSTANTS } from "./check.constants.js";
 import ArrayOfObjectValidation from "./array_of_object.js";
 
@@ -363,6 +367,12 @@ class Check {
         reject(new errorInFunction({ message: callback, data: null }));
       }
     });
+  }
+
+  static async checkExistenceOrThrow(entity, key) {
+    if (!entity) {
+      throw new DataNotFoundError({ message: `Data ${key} tidak ditemukan` });
+    }
   }
 }
 

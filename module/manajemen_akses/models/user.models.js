@@ -13,13 +13,17 @@ export const users = DB.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    username: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
       defaultValue: 0,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
 

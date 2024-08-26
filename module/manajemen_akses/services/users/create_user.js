@@ -2,20 +2,21 @@ import DataDuplicateError from "../../../../helpers/error/dataDuplicateErrorHelp
 import { users } from "../../models/user.models.js";
 import bcrypt from "bcrypt";
 
-export const createUser = async ({ username, nama_lengkap, password }) => {
+export const createUser = async ({ email, nama_lengkap, password, role }) => {
   try {
-    const usersExist = await users.findOne({ where: { username } });
+    const usersExist = await users.findOne({ where: { email } });
     if (usersExist) {
       throw new DataDuplicateError({
         statusCode: 400,
-        message: "User already exist",
+        message: "Email sudah digunakan",
       });
     } else {
       const passwordEncrypt = await bcrypt.hash(password, 10);
       let data = {
-        username,
+        email,
         password: passwordEncrypt,
         nama_lengkap,
+        role,
       };
       await users.create(data);
     }

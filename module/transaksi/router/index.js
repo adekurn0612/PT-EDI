@@ -1,12 +1,12 @@
 import { Router } from "express";
-import productPromo from "./product_promo.router.js";
-import order from "./order.router.js";
-import orderDetail from "./order_detail.router.js";
+import riwayatPendidikanRouter from "./riwayat_pendidikan.router.js";
+import riwayatPekerjaanRouter from "./riwayat_pekerjaan.router.js";
+import riwayatPelatihanRouter from "./riwayat_pelatihan.router.js";
+import riwayatApplyRouter from "./riwayat_apply.router.js";
 
 const router = Router();
-
-router.use("/product-promo", productPromo);
-router.use("/order", order);
-router.use("/order-detail", orderDetail);
-
+router.use("/riwayat-pendidikan", riwayatPendidikanRouter);
+router.use("/riwayat-pelatihan", riwayatPelatihanRouter);
+router.use("/riwayat-pekerjaan", riwayatPekerjaanRouter);
+router.use("/riwayat-apply", riwayatApplyRouter);
 export default router;

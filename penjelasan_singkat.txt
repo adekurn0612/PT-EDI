@@ -1,7 +1,0 @@
-1.pertama kasir akan membuat pesanan dengan ep create di folder order , saat membuat pesanan akan mengubah status meja yang dipilih menjadi dipakai
-2.setelah order dibuat maka masukan list item dengan ep create folder order detail
-3.setelah selesai maka kunci order dengan ep kunci di order di folder order
-4.jika kunci sukses maka akan muncul bill
-5.seletalah itu lakukan pembayaran dengan ep bayar di folder order (hanya baru mengupdate status order ke bayar belum ada method pembayaran)
-6.setelah bayar skses maka akan muncul response nama product dan nama printer 
-7.setelah itu tutup dengan ep tutup di folder order , akan mengubah status meja menjadi tersedia

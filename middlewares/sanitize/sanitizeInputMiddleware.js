@@ -1,10 +1,10 @@
-import format_responseHelper from "./../../helpers/constants/constantsResponseHelper.js";
-
+// Fungsi untuk membersihkan kata kunci berbahaya
 const CleanKeyword = (inputStr) => {
-  if (typeof sanitizedInput !== "string") {
+  if (typeof inputStr !== "string") {
     return inputStr;
   }
-  // Define a list of characters that need to be replaced
+
+  // Definisi kata kunci SQL yang perlu dihapus
   const charsToReplace = [
     ";",
     "--",
@@ -28,21 +28,17 @@ const CleanKeyword = (inputStr) => {
     "EXEC",
   ];
 
-  // Replace each character with an empty string
-  charsToReplace.forEach((char) => {
-    inputStr = inputStr.split(char).join("");
-  });
-
-  return inputStr;
+  // Menggunakan regex untuk menggantikan semua karakter berbahaya
+  const regex = new RegExp(charsToReplace.join("|"), "gi");
+  return inputStr.replace(regex, "");
 };
+
+// Fungsi untuk membersihkan input objek
 const CleanInput = (input) => {
   if (typeof input === "object" && input !== null) {
     for (let key in input) {
-      // Use Object.prototype.hasOwnProperty.call() to avoid issues
       if (Object.prototype.hasOwnProperty.call(input, key)) {
         if (typeof input[key] === "string") {
-          // Remove characters commonly used in SQL injection
-          // input[key] = input[key].replace(/[\';\-\-]/g, '');
           input[key] = CleanKeyword(input[key]);
         }
       }
@@ -51,15 +47,16 @@ const CleanInput = (input) => {
   return input;
 };
 
+// Middleware untuk membersihkan semua input dari request
 const cleanMiddleware = (req, res, next) => {
   try {
-    // Clean query parameters
+    // Membersihkan query parameters
     req.query = CleanInput(req.query);
 
-    // Clean request body
+    // Membersihkan request body
     req.body = CleanInput(req.body);
 
-    // Clean route parameters
+    // Membersihkan route parameters
     req.params = CleanInput(req.params);
     next();
   } catch (error) {
@@ -67,4 +64,4 @@ const cleanMiddleware = (req, res, next) => {
   }
 };
 
-export default { cleanMiddleware };
+export default cleanMiddleware;

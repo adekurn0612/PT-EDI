@@ -1,5 +1,5 @@
-// Import middleware and routers
-// import SanitizeInput from "./sanitize/sanitizeInputMiddleware.js";
+// Import middleware dan router
+import cleanMiddleware from "./sanitize/sanitizeInputMiddleware.js"; // Sesuaikan path jika perlu
 import errorHandler from "./error/errorHelper.js";
 import successHandler from "./success/succesResponse.js";
 import notfound_response from "./error/notFoundResponse.js";
@@ -8,10 +8,10 @@ import router from "./../routers/index.js";
 
 class Middlewares {
   static configure(app) {
-    // Use middleware
-    // app.use(SanitizeInput);
+    // Gunakan middleware
+    app.use(cleanMiddleware);
     // app.use(authHandler); // eslint-disable-line
-    // Use routers
+    // Gunakan router
     app.use("/", router);
     app.use(errorHandler);
     app.use(notfound_response);

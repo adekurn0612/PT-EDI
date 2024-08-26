@@ -4,16 +4,17 @@ import FormatResponse from "./../../../helpers/response/responseHelper.js";
 
 const create = async (req, res, next) => {
   try {
-    const { username, nama_lengkap, password } = req.body;
+    const { email, nama_lengkap, password, role } = req.body;
 
     let array = [
       { method: `string`, key: password, variable_name: `password` },
-      { method: `string`, key: username, variable_name: `username` },
+      { method: `string`, key: email, variable_name: `email` },
       { method: `string`, key: nama_lengkap, variable_name: `nama lengkap` },
+      { method: `string`, key: role, variable_name: `role` },
     ];
     await Check.multiple_check_stringvar({ array });
 
-    await userServices.createUser({ username, nama_lengkap, password });
+    await userServices.createUser({ email, nama_lengkap, password, role });
     req.body.responses = FormatResponse.successObject({
       data: null,
       additionalData: null,
